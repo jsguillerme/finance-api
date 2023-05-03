@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model CardCredit {
+  id              String  @id @default(uuid())
+  owner_card      String
+  registered_at   String
+  expired_date    String
+  limit_value     String
+  current_balance String?
+  income_balance  String?
+  outcome_balance String?
+  number_card     String
+  surname         String
+
+  Trasactions Trasaction[]
+
+  @@unique([id])
+  @@map("credit_card")
+}
+
+model Trasaction {
+  id                     String @id @default(uuid())
+  created_at             String
+  establishment_name     String
+  spent_value            String
+  category_establishment String
+  type_transaction       String
+
+  card_used      CardCredit @relation(fields: [card_credit_id], references: [id])
+  card_credit_id String
+
+  @@unique([id])
+  @@map("transaction_card")
+}
+
+model Goals {
+  id              String @id @default(uuid())
+  title           String
+  category_goal   String
+  predicted_value String
+  expected_date   String
+  completed       String @default("not-completed")
+  created_at      String
+
+  @@unique([id])
+  @@map("goals")
+}
